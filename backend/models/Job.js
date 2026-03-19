@@ -1,20 +1,29 @@
 const mongoose = require("mongoose")
 
 const jobSchema = new mongoose.Schema({
+title: String,
+description: String,
+budget: Number,
+skills: [String],
 
-    title: String,
+status: {
+type: String,
+enum: ["Not Hired Yet","Requested","In Progress","Completed"],
+default: "Not Hired Yet"
+},
 
-    description: String,
+applicants: [
+{
+freelancerId: String,
+name: String,
+skills: [String],
+status: {
+type: String,
+default: "Requested"
+}
+}
+]
 
-    clientId: String,
-
-    budget: Number,
-
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-
-})
+},{timestamps:true})
 
 module.exports = mongoose.model("Job", jobSchema)

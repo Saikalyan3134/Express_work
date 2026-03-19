@@ -1,91 +1,69 @@
 import { useEffect, useState } from "react"
 import API from "../services/api"
+import ApplyModal from "../components/ApplyModal"
 
-function FreelancerHome() {
+function FreelancerHome(){
 
-const [jobs, setJobs] = useState([])
+const [jobs,setJobs] = useState([])
+const [selectedJob,setSelectedJob] = useState(null)
 
-useEffect(() => {
+useEffect(()=>{
 
-const fetchJobs = async () => {
-try {
+const fetchJobs = async ()=>{
+try{
 const res = await API.get("/jobs")
 setJobs(res.data)
-} catch (err) {
+}catch(err){
 console.log(err)
 }
 }
 
 fetchJobs()
 
-}, [])
+},[])
 
-return (
+return(
 
-<div className="container mt-4">
+<div className="freelancer-container">
 
-{/* WELCOME */}
-<div className="welcome-card mb-4">
+{/* HERO SEARCH */}
+<div className="hero-search">
 
-<h3>Welcome back 👋</h3>
-<p>Find the best jobs tailored for your skills</p>
-
-</div>
-
-{/* STATS */}
-<div className="row mb-4">
-
-<div className="col-md-4">
-<div className="stat-card">
-<h5>12</h5>
-<p>Proposals Sent</p>
-</div>
-</div>
-
-<div className="col-md-4">
-<div className="stat-card">
-<h5>$1,200</h5>
-<p>Earnings</p>
-</div>
-</div>
-
-<div className="col-md-4">
-<div className="stat-card">
-<h5>5</h5>
-<p>Active Jobs</p>
-</div>
-</div>
+<input 
+type="text"
+placeholder="Search jobs, skills, freelancers..."
+className="search-input"
+/>
 
 </div>
 
-{/* JOB FEED */}
-<h4 className="section-title mb-3">Recommended Jobs</h4>
+{/* JOB GRID */}
+<h4 className="section-title">Recommended Jobs</h4>
 
-<div className="row">
+<div className="job-grid">
 
-{jobs.slice(0,6).map((job) => (
+{jobs.map((job)=>(
 
-<div className="col-md-6 mb-4" key={job._id}>
+<div className="job-card" key={job._id}>
 
-<div className="job-card">
-
-<h5>{job.title}</h5>
+<h5 className="job-title">{job.title}</h5>
 
 <p className="job-desc">
-{job.description?.slice(0,100)}...
+{job.description?.slice(0,120)}...
 </p>
 
-<div className="job-meta">
+<div className="job-footer">
 
-<span className="badge bg-success">
+<span className="budget-tag">
 ${job.budget}
 </span>
 
-<button className="btn btn-sm btn-neon">
-Apply
+<button 
+className="apply-btn"
+onClick={()=>setSelectedJob(job._id)}
+>
+Apply Now
 </button>
-
-</div>
 
 </div>
 
@@ -95,18 +73,13 @@ Apply
 
 </div>
 
-{/* TIPS */}
-<div className="tips-card mt-4">
-
-<h5>💡 Tips to Get Hired Faster</h5>
-
-<ul>
-<li>Write personalized proposals</li>
-<li>Highlight your best projects</li>
-<li>Respond quickly to clients</li>
-</ul>
-
-</div>
+{/* MODAL */}
+{selectedJob && (
+<ApplyModal 
+jobId={selectedJob}
+close={()=>setSelectedJob(null)}
+/>
+)}
 
 </div>
 

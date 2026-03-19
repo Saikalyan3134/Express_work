@@ -2,19 +2,24 @@ const mongoose = require("mongoose")
 
 const proposalSchema = new mongoose.Schema({
 
-jobId:String,
+job: {
+type: mongoose.Schema.Types.ObjectId,
+ref: "Job"
+},
 
-freelancerId:String,
+freelancer: {
+type: mongoose.Schema.Types.ObjectId,
+ref: "User"
+},
 
-coverLetter:String,
+coverLetter: String,
+bid: Number,
 
-bid:Number,
-
-createdAt:{
-type:Date,
-default:Date.now
+createdAt: {
+type: Date,
+default: Date.now
 }
 
 })
 
-module.exports = mongoose.model("Proposal",proposalSchema)
+module.exports = mongoose.model("Proposal", proposalSchema)
